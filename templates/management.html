@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Управление разделами</title>
+    <title>GGR quota manager</title>
     <meta charset="UTF-8">
     <style>
         table {
@@ -31,56 +31,85 @@
             <th>Браузер</th>
             <th>Версия</th>
             <th>Регион</th>
-            <th>Хост</th>
-            <th>Порт</th>
-            <th>Количество</th>
-            <th>Имя пользователя</th>
-            <th>Пароль</th>
-            <th>Схема</th>
-            <th>VNC url</th>
             <th>Действия</th>
         </tr>
         {% for browser in browsers %}
-        {% for version in browser.findall('version') %}
-        {% for region in version.findall('region') %}
-        {% for host in region.findall('host') %}
+        {% for version in browser.versions %}
+        {% for region in version.regions %}
         <tr>
-            <td>{{ browser.get('name') }}</td>
-            <td>{{ version.get('number') }}</td>
-            <td>{{ region.get('name') }}</td>
-            <td>{{ host.get('name') }}</td>
-            <td>{{ host.get('port') }}</td>
-            <td>{{ host.get('count') }}</td>
-            <td>{{ host.get('username') }}</td>
-            <td>{{ host.get('password') }}</td>
-            <td>{{ host.get('scheme') }}</td>
-            <td>{{ host.get('vnc') }}</td>
+            <td>{{ browser.name }}</td>
+            <td>{{ version.number }}</td>
+            <td>{{ region.name }}</td>
             <td>
                 <form action="/remove_section" method="post" style="display: inline;">
-                    <input type="hidden" name="browser" value="{{ browser.get('name') }}">
-                    <input type="hidden" name="version" value="{{ version.get('number') }}">
-                    <input type="hidden" name="region" value="{{ region.get('name') }}">
+                    <input type="hidden" name="browser" value="{{ browser.name }}">
+                    <input type="hidden" name="version" value="{{ version.number }}">
+                    <input type="hidden" name="region" value="{{ region.name }}">
                     <input type="submit" value="Удалить">
                 </form>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4">
+                <table>
+                    <tr>
+                        <th>Хост</th>
+                        <th>Порт</th>
+                        <th>Количество</th>
+                        <th>Username</th>
+                        <th>Password</th>
+                        <th>Scheme</th>
+                        <th>VNC</th>
+                        <th>Действия</th>
+                    </tr>
+                    {% for host in region.hosts %}
+                    <tr>
+                        <td>{{ host.name }}</td>
+                        <td>{{ host.port }}</td>
+                        <td>{{ host.count }}</td>
+                        <td>{{ host.username }}</td>
+                        <td>{{ host.password }}</td>
+                        <td>{{ host.scheme }}</td>
+                        <td>{{ host.vnc }}</td>
+                        <td>
+                            <form action="/remove_host" method="post" style="display: inline;">
+                                <input type="hidden" name="browser" value="{{ browser.name }}">
+                                <input type="hidden" name="version" value="{{ version.number }}">
+                                <input type="hidden" name="region" value="{{ region.name }}">
+                                <input type="hidden" name="host" value="{{ host.name }}">
+                                <input type="submit" value="Удалить">
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    <!-- Форма для добавления хоста -->
+                    <tr>
+                        <form action="/add_host" method="post">
+                            <input type="hidden" name="browser" value="{{ browser.name }}">
+                            <input type="hidden" name="version" value="{{ version.number }}">
+                            <input type="hidden" name="region" value="{{ region.name }}">
+                        <td><input type="text" name="host" placeholder="Хост" required></td>
+                        <td><input type="number" name="port" placeholder="Порт" required></td>
+                        <td><input type="number" name="count" placeholder="Количество" required></td>
+                        <td><input type="text" name="username" placeholder="Username"></td>
+                        <td><input type="password" name="password" placeholder="Password"></td>
+                        <td><input type="text" name="scheme" placeholder="Scheme"></td>
+                        <td><input type="text" name="vnc" placeholder="vnc://myvnc.example.com:5900"></td>
+                        <td><input type="submit" value="Добавить"></td>
+                        </form>
+                    </tr>
+                </table>
             </td>
         </tr>
         {% endfor %}
         {% endfor %}
         {% endfor %}
-        {% endfor %}
-        <!-- Последняя строка для добавления новых разделов -->
+        <!-- Форма для добавления разделов -->
         <tr>
             <form action="/add_section" method="post">
             <td><input type="text" name="browser" placeholder="Браузер" required></td>
             <td><input type="text" name="version" placeholder="Версия" required></td>
             <td><input type="number" name="region" placeholder="Регион" required></td>
-            <td><input type="text" name="host" placeholder="Хост" required></td>
-            <td><input type="number" name="port" placeholder="Порт" required></td>
-            <td><input type="number" name="count" placeholder="Количество" required></td>
-            <td><input type="text" name="username" placeholder="Имя пользователя"></td>
-            <td><input type="password" name="password" placeholder="Пароль"></td>
-            <td><input type="text" name="scheme" placeholder="http"></td>
-            <td><input type="text" name="vnc" placeholder="url"></td>
             <td><input type="submit" value="Добавить"></td>
             </form>
         </tr>
