@@ -34,6 +34,10 @@
             <th>Хост</th>
             <th>Порт</th>
             <th>Количество</th>
+            <th>Имя пользователя</th>
+            <th>Пароль</th>
+            <th>Схема</th>
+            <th>VNC url</th>
             <th>Действия</th>
         </tr>
         {% for browser in browsers %}
@@ -47,6 +51,10 @@
             <td>{{ host.get('name') }}</td>
             <td>{{ host.get('port') }}</td>
             <td>{{ host.get('count') }}</td>
+            <td>{{ host.get('username') }}</td>
+            <td>{{ host.get('password') }}</td>
+            <td>{{ host.get('scheme') }}</td>
+            <td>{{ host.get('vnc') }}</td>
             <td>
                 <form action="/remove_section" method="post" style="display: inline;">
                     <input type="hidden" name="browser" value="{{ browser.get('name') }}">
@@ -69,6 +77,10 @@
             <td><input type="text" name="host" placeholder="Хост" required></td>
             <td><input type="number" name="port" placeholder="Порт" required></td>
             <td><input type="number" name="count" placeholder="Количество" required></td>
+            <td><input type="text" name="username" placeholder="Имя пользователя"></td>
+            <td><input type="password" name="password" placeholder="Пароль"></td>
+            <td><input type="text" name="scheme" placeholder="http"></td>
+            <td><input type="text" name="vnc" placeholder="url"></td>
             <td><input type="submit" value="Добавить"></td>
             </form>
         </tr>

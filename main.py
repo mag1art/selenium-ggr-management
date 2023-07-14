@@ -76,6 +76,10 @@ def add_section():
     host_name = request.form['host']
     port = request.form['port']
     count = request.form['count']
+    hostusername = request.form.get('username')
+    hostpassword = request.form.get('password')
+    scheme = request.form.get('scheme')
+    vnc = request.form.get('vnc')
 
     # Чтение XML-файла
     tree = ET.parse(xml_file_path)
@@ -104,6 +108,15 @@ def add_section():
     host_element.set('name', host_name)
     host_element.set('port', port)
     host_element.set('count', count)
+
+    if hostusername:
+        host_element.set('username', hostusername)
+    if hostpassword:
+        host_element.set('password', hostpassword)
+    if scheme:
+        host_element.set('scheme', scheme)
+    if vnc:
+        host_element.set('vnc', vnc)
     
     # Форматирование XML-файла с отступами
     xml_str = minidom.parseString(ET.tostring(root)).toprettyxml(indent="  ")
@@ -113,7 +126,7 @@ def add_section():
     with open(xml_file_path, 'w') as file:
         file.write(formatted_xml_str)
 
-    return redirect('/')
+    return redirect('/management')
 
 # Обработка формы для удаления раздела
 @app.route('/remove_section', methods=['POST'])
@@ -165,7 +178,7 @@ def remove_section():
     with open(xml_file_path, 'w') as file:
         file.write(formatted_xml_str)
 
-    return redirect('/')
+    return redirect('/management')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5099)
