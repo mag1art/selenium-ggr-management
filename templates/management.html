@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Управление разделами</title>
+    <meta charset="UTF-8">
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="float: left;">Управление разделами</h1>
+    <!-- Кнопка выхода из аккаунта -->
+    <form action="/logout" method="get" style="margin-top: 10px; float: right;">
+        <input type="submit" value="Выход">
+    </form>
+    <table>
+        <tr>
+            <th>Браузер</th>
+            <th>Версия</th>
+            <th>Регион</th>
+            <th>Хост</th>
+            <th>Порт</th>
+            <th>Количество</th>
+            <th>Действия</th>
+        </tr>
+        {% for browser in browsers %}
+        {% for version in browser.findall('version') %}
+        {% for region in version.findall('region') %}
+        {% for host in region.findall('host') %}
+        <tr>
+            <td>{{ browser.get('name') }}</td>
+            <td>{{ version.get('number') }}</td>
+            <td>{{ region.get('name') }}</td>
+            <td>{{ host.get('name') }}</td>
+            <td>{{ host.get('port') }}</td>
+            <td>{{ host.get('count') }}</td>
+            <td>
+                <form action="/remove_section" method="post" style="display: inline;">
+                    <input type="hidden" name="browser" value="{{ browser.get('name') }}">
+                    <input type="hidden" name="version" value="{{ version.get('number') }}">
+                    <input type="hidden" name="region" value="{{ region.get('name') }}">
+                    <input type="submit" value="Удалить">
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+        {% endfor %}
+        {% endfor %}
+        {% endfor %}
+        <!-- Последняя строка для добавления новых разделов -->
+        <tr>
+            <form action="/add_section" method="post">
+            <td><input type="text" name="browser" placeholder="Браузер" required></td>
+            <td><input type="text" name="version" placeholder="Версия" required></td>
+            <td><input type="number" name="region" placeholder="Регион" required></td>
+            <td><input type="text" name="host" placeholder="Хост" required></td>
+            <td><input type="number" name="port" placeholder="Порт" required></td>
+            <td><input type="number" name="count" placeholder="Количество" required></td>
+            <td><input type="submit" value="Добавить"></td>
+            </form>
+        </tr>
+    </table>
+</body>
+</html>

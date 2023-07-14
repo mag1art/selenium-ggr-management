@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<ns0:browsers xmlns:ns0="urn:config.gridrouter.qatools.ru">
+  <browser name="chrome">
+    <version number="110.0">
+      <region name="1">
+        <host name="host.exapmle.com" port="4445" count="1"/>
+      </region>
+    </version>
+  </browser>
+</ns0:browsers>
